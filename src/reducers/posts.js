@@ -1,10 +1,14 @@
-export default (posts = [], action) => {
+export default function postReducer(posts = [], action) {
     switch (action.type) {
         case "FETCH_ALL":
-            return posts;
+            return action.payload;
         case "CREATE":
-            return posts;
+            return [...posts, action.payload];
+        case "UPDATE":
+            return posts.map((post) =>
+                post._id === action.payload._id ? action.payload : post
+            );
         default:
-            break;
+            return posts;
     }
-};
+}

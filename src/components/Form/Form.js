@@ -10,16 +10,17 @@ const Form = ({ currentId, setCurrentId }) => {
         title: "",
         message: "",
         tags: "",
-        selectedFile: {},
+        selectedFile: "",
     });
     const post = useSelector((state) =>
         currentId ? state.postReducer.find((p) => p._id === currentId) : null
     );
     const classes = useStyles();
     const dispatch = useDispatch();
+
     useEffect(() => {
         if (post) setPostData(post);
-    }, [post]);
+    }, [currentId, post]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -28,8 +29,18 @@ const Form = ({ currentId, setCurrentId }) => {
         } else {
             dispatch(createPost(postData));
         }
+        clear();
     };
-    const clear = () => {};
+    const clear = () => {
+        setCurrentId(null);
+        setPostData({
+            creator: "",
+            title: "",
+            message: "",
+            tags: "",
+            selectedFile: "",
+        });
+    };
     return (
         <Paper className={classes.paper}>
             <form
@@ -38,7 +49,9 @@ const Form = ({ currentId, setCurrentId }) => {
                 className={`${classes.root} ${classes.form}`}
                 onSubmit={handleSubmit}
             >
-                <Typography variant="h6">Creating a Memory</Typography>
+                <Typography variant="h6">
+                    {currentId ? "Updating" : "Creating"} a Memory
+                </Typography>
                 <TextField
                     name="creator"
                     variant="outlined"
@@ -84,7 +97,10 @@ const Form = ({ currentId, setCurrentId }) => {
                         type="file"
                         multiple={false}
                         onDone={(base64) =>
-                            setPostData({ ...postData, selectedFile: base64 })
+                            setPostData({
+                                ...postData,
+                                selectedFile: base64.base64,
+                            })
                         }
                     />
                 </div>

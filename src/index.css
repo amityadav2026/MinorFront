@@ -5,3 +5,7 @@ body {
     background-repeat: no-repeat;
     background-position: top left;
 }
+
+* {
+    font-family: "Heebo", sans-serif !important;
+}
